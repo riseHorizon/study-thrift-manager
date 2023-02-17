@@ -1,2 +1,5 @@
 .idea/
 simple-model/simple-consumer/target/
+demo/demo-api/target/
+demo/demo-consumer/target/
+demo/demo-provider/target/
