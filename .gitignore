@@ -3,3 +3,6 @@ simple-model/simple-consumer/target/
 demo/demo-api/target/
 demo/demo-consumer/target/
 demo/demo-provider/target/
+mutil-demo/mutil-demo-api/target/
+mutil-demo/mutil-demo-provider/target/
+mutil-demo/mutil-demo-consumer/target/
