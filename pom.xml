@@ -12,6 +12,7 @@
         <module>demo</module>
         <module>mutil-demo</module>
         <module>zk-reg-demo</module>
+        <module>hello</module>
     </modules>
     <packaging>pom</packaging>
 

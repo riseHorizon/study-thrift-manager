@@ -3,24 +3,25 @@ package com.horizon.demo.client;
 import com.horizon.demo.service.DemoThriftService;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.transport.TNonblockingSocket;
+import org.apache.thrift.transport.TNonblockingTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
+import org.apache.thrift.transport.layered.TFramedTransport;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author horizon
- */
-public class ClientTest {
+public class THsHaServerClient002Test {
 
     private static final String SERVER_HOST = "localhost";
     private static final int SERVER_PORT = 12356;
 
     public static void main(String[] args) {
+        TNonblockingTransport transport = null;
         try {
-            // 设置调用的服务地址为本地，端口为6789
-            TTransport transport = new TSocket(SERVER_HOST, SERVER_PORT);
-            transport.open();
+            // 对TSocket的transport对象增加，TFramedTransport装饰，设置调用的服务地址为本地，端口为6789
+            transport = new TNonblockingSocket(SERVER_HOST, SERVER_PORT);
+            // transport.open();
 
             // 数据传输协议有：二进制协议、压缩协议、JSON格式协议
             // 这里使用的是二进制协议
@@ -42,7 +43,10 @@ public class ClientTest {
             System.out.println("client end");
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if(transport != null) {
+                transport.close();
+            }
         }
     }
-
 }

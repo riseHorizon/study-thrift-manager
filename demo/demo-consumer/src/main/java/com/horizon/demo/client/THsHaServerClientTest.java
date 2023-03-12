@@ -5,21 +5,20 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
+import org.apache.thrift.transport.layered.TFastFramedTransport;
+import org.apache.thrift.transport.layered.TFramedTransport;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author horizon
- */
-public class ClientTest {
+public class THsHaServerClientTest {
 
     private static final String SERVER_HOST = "localhost";
     private static final int SERVER_PORT = 12356;
 
     public static void main(String[] args) {
         try {
-            // 设置调用的服务地址为本地，端口为6789
-            TTransport transport = new TSocket(SERVER_HOST, SERVER_PORT);
+            // 对TSocket的transport对象增加，TFramedTransport装饰，设置调用的服务地址为本地，端口为6789
+            TTransport transport = new TFastFramedTransport(new TSocket(SERVER_HOST, SERVER_PORT));
             transport.open();
 
             // 数据传输协议有：二进制协议、压缩协议、JSON格式协议
@@ -44,5 +43,4 @@ public class ClientTest {
             e.printStackTrace();
         }
     }
-
 }

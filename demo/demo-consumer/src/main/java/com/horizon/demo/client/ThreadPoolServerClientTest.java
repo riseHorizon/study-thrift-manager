@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author horizon
  */
-public class ClientTest {
+public class ThreadPoolServerClientTest {
 
     private static final String SERVER_HOST = "localhost";
     private static final int SERVER_PORT = 12356;

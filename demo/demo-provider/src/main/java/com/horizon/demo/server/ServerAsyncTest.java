@@ -4,27 +4,19 @@ import com.horizon.demo.service.BizCalcAsyncServiceImpl;
 import com.horizon.demo.service.BizCalcServiceImpl;
 import com.horizon.demo.service.DemoThriftService;
 import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.server.ServerContext;
 import org.apache.thrift.server.TServer;
-import org.apache.thrift.server.TServerEventHandler;
 import org.apache.thrift.server.TSimpleServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
-
-import java.io.IOException;
-import java.net.ServerSocket;
 
 /**
  * @author horizon
  */
-public class ServerTest {
+public class ServerAsyncTest {
 
     private static final int SERVER_PORT = 12356;
 
-    private static final BizCalcServiceImpl bizService = new BizCalcServiceImpl();
+    private static final BizCalcAsyncServiceImpl bizAsyncService = new BizCalcAsyncServiceImpl();
 
     public static void main(String[] args) {
         try {
@@ -33,7 +25,7 @@ public class ServerTest {
             TSimpleServer.Args serverArgs = new TSimpleServer.Args(serverTransport);
 
             // 获取processor
-            DemoThriftService.Processor<DemoThriftService.Iface> processor = new DemoThriftService.Processor<>(bizService);
+            DemoThriftService.AsyncProcessor<DemoThriftService.AsyncIface> processor = new DemoThriftService.AsyncProcessor<>(bizAsyncService);
             serverArgs.processor(processor);
 
             // 指定TBinaryProtocol

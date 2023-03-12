@@ -1,26 +1,14 @@
 package com.horizon.demo.server;
 
-import com.horizon.demo.service.BizCalcAsyncServiceImpl;
 import com.horizon.demo.service.BizCalcServiceImpl;
 import com.horizon.demo.service.DemoThriftService;
 import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.server.ServerContext;
+import org.apache.thrift.server.TNonblockingServer;
 import org.apache.thrift.server.TServer;
-import org.apache.thrift.server.TServerEventHandler;
-import org.apache.thrift.server.TSimpleServer;
-import org.apache.thrift.transport.TServerSocket;
-import org.apache.thrift.transport.TServerTransport;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
+import org.apache.thrift.transport.TNonblockingServerSocket;
+import org.apache.thrift.transport.layered.TFramedTransport;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-
-/**
- * @author horizon
- */
-public class ServerTest {
+public class TNonblockingServerTest {
 
     private static final int SERVER_PORT = 12356;
 
@@ -29,8 +17,8 @@ public class ServerTest {
     public static void main(String[] args) {
         try {
             // 获取serverTransport
-            TServerTransport serverTransport = new TServerSocket(SERVER_PORT);
-            TSimpleServer.Args serverArgs = new TSimpleServer.Args(serverTransport);
+            TNonblockingServerSocket serverTransport = new TNonblockingServerSocket(SERVER_PORT);
+            TNonblockingServer.Args serverArgs = new TNonblockingServer.Args(serverTransport);
 
             // 获取processor
             DemoThriftService.Processor<DemoThriftService.Iface> processor = new DemoThriftService.Processor<>(bizService);
@@ -39,9 +27,11 @@ public class ServerTest {
             // 指定TBinaryProtocol
             TBinaryProtocol.Factory protocolFactory = new TBinaryProtocol.Factory();
             serverArgs.protocolFactory(protocolFactory);
+            // 对于AbstractNonblockingServerArgs 默认已经设置了new TFramedTransport.Factory()，这里可以不需要设置
+            // serverArgs.transportFactory(new TFramedTransport.Factory());
 
-            // 单线程服务模型，一般用于测试
-            TServer server = new TSimpleServer(serverArgs);
+            // 单线程的NIO的服务模型
+            TServer server = new TNonblockingServer(serverArgs);
             /* 如果处理客户端连接过程中的事件信息可以设置一个事件处理器
             server.setServerEventHandler(new TServerEventHandler() {
                 @Override
@@ -65,7 +55,7 @@ public class ServerTest {
                 }
             });
             */
-            System.out.println("Starting the simple server...");
+            System.out.println("Starting the TNonblockingServer server...");
 
             // 暴露服务
             server.serve();
@@ -73,5 +63,4 @@ public class ServerTest {
             e.printStackTrace();
         }
     }
-
 }

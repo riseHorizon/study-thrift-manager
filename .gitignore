@@ -11,3 +11,4 @@ springboot-demo/springboot-thrift-client/target/
 springboot-demo/springboot-thrift-server/target/
 zk-reg-demo/zk-reg-client/target/
 zk-reg-demo/zk-reg-server/target/
+hello/target/
