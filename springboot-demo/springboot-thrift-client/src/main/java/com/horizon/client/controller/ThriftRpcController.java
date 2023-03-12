@@ -1,35 +1,33 @@
 package com.horizon.client.controller;
 
-import com.horizon.client.service.RPCThriftClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.horizon.client.service.ThriftClientRpcService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
 @RestController
 @RequestMapping("/hansonwang99")
-public class RPCThriftContoller {
+public class ThriftRpcController {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private RPCThriftClient rpcThriftClient;
+    @Resource
+    private ThriftClientRpcService thriftClientRpcService;
 
     @RequestMapping(value = "/thrift", method = RequestMethod.GET)
     public String thriftTest(HttpServletRequest request, HttpServletResponse response) {
         try {
-            rpcThriftClient.open();
-            return rpcThriftClient.getRPCThriftService().getData("hansonwang99");
+            thriftClientRpcService.open();
+            return thriftClientRpcService.getRPCThriftService().getData("hansonwang99");
         } catch (Exception e) {
-            logger.error("RPC调用失败", e);
+            log.error("RPC调用失败", e);
             return "error";
         } finally {
-            rpcThriftClient.close();
+            thriftClientRpcService.close();
         }
     }
 }

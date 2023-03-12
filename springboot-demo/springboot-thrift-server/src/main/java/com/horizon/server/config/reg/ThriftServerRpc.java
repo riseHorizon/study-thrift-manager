@@ -1,7 +1,7 @@
-package com.horizon.server.config.dto;
+package com.horizon.server.config.reg;
 
 import com.horizon.demo.service.RPCDateService;
-import com.horizon.server.service.RPCDateServiceImpl;
+import com.horizon.server.service.DateRpcServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServer;
@@ -10,21 +10,25 @@ import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransportFactory;
 
+import java.util.Objects;
+
 @Slf4j
-public class RPCThriftServer {
+public class ThriftServerRpc {
 
-    private int port;
+    private final int port;
 
-    private int minThreads;
+    private final int minThreads;
 
-    private int maxThreads;
+    private final int maxThreads;
 
-    private RPCDateServiceImpl rpcDateService;
+    private final TBinaryProtocol.Factory protocolFactory;
+    private final TTransportFactory transportFactory;
 
-    private TBinaryProtocol.Factory protocolFactory;
-    private TTransportFactory transportFactory;
+    private final DateRpcServiceImpl rpcDateService;
 
-    public RPCThriftServer(int port, int minThreads, int maxThreads, RPCDateServiceImpl rpcDateService) {
+    private TServer server;
+
+    public ThriftServerRpc(int port, int minThreads, int maxThreads, DateRpcServiceImpl rpcDateService) {
         this.port = port;
         this.minThreads = minThreads;
         this.maxThreads = maxThreads;
@@ -34,7 +38,6 @@ public class RPCThriftServer {
     }
 
     public void start() {
-
         RPCDateService.Processor<RPCDateService.Iface> processor = new RPCDateService.Processor<>(rpcDateService);
         try {
             TServerTransport transport = new TServerSocket(port);
@@ -45,7 +48,7 @@ public class RPCThriftServer {
             tArgs.minWorkerThreads(minThreads);
             tArgs.maxWorkerThreads(maxThreads);
 
-            TServer server = new TThreadPoolServer(tArgs);
+            server = new TThreadPoolServer(tArgs);
             log.info("thrift服务启动成功, 端口={}", port);
             server.serve();
         } catch (Exception e) {
@@ -53,5 +56,11 @@ public class RPCThriftServer {
             throw new RuntimeException("thrift服务启动失败");
         }
 
+    }
+
+    public void close() {
+        if(Objects.nonNull(server)) {
+            server.stop();
+        }
     }
 }

@@ -1,7 +1,7 @@
-package com.horizon.reg.action;
+package com.horizon.client.controller;
 
-import com.horizon.reg.dto.InstanceDetails;
-import com.horizon.reg.service.ServiceDiscoverer;
+import com.horizon.client.service.ServiceDiscoverer;
+import com.horizon.demo.dto.InstanceDetails;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;

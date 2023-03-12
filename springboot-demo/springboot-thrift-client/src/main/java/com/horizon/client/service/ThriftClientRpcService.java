@@ -1,27 +1,32 @@
 package com.horizon.client.service;
 
 import com.horizon.demo.service.RPCDateService;
+import lombok.Data;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransportException;
 
-public class RPCThriftClient {
+public class ThriftClientRpcService {
 
     private RPCDateService.Client client;
     private TBinaryProtocol protocol;
     private TSocket transport;
+
     private String host;
     private int port;
 
     public String getHost() {
         return host;
     }
+
     public void setHost(String host) {
         this.host = host;
     }
+
     public int getPort() {
         return port;
     }
+
     public void setPort(int port) {
         this.port = port;
     }
@@ -40,8 +45,7 @@ public class RPCThriftClient {
         transport.open();
     }
 
-    public void close()
-    {
+    public void close() {
         transport.close();
     }
 
